@@ -1,0 +1,146 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="cart-page">
+  <h1 class="cart-title">Your Cart</h1>
+  <p class="cart-subtitle">Review your selection Before Checkout(<span id="cartCount">0</span> items)</p>
+
+  <div class="cart-layout">
+
+    <!-- Cart Items -->
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty" id="cartEmpty" style="display:none;">
+        <i class="fas fa-shopping-cart" style="font-size:3rem;color:var(--border);margin-bottom:16px;display:block;"></i>
+        <p style="color:#8a7080;">Your cart is empty.</p>
+        <a href="{% url 'shop' %}" class="btn-shop" style="margin-top:16px;display:inline-block;text-decoration:none;">Shop Now</a>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="cart-summary">
+      <h3 class="summary-title">Order Summary</h3>
+      <p class="summary-selected"><span id="selectedCount">0</span> Item selected</p>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">₹0</span>
+      </div>
+      <div class="summary-row">
+        <span>Estimated Shipping</span>
+        <span>₹50</span>
+      </div>
+      <div class="summary-row">
+        <span>GST</span>
+        <span>₹50</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row summary-total">
+        <span>Total</span>
+        <span id="totalPrice">₹100</span>
+      </div>
+
+<button class="btn-checkout" onclick="proceedCheckout()">Proceed to Checkout</button>    </div>
+  </div>
+</div>
+
+<script>
+// Cart stored in sessionStorage
+let cart = JSON.parse(sessionStorage.getItem('glowify_cart') || '[]');
+
+function renderCart() {
+  const container = document.getElementById('cartItems');
+  const empty = document.getElementById('cartEmpty');
+
+  if (!cart.length) {
+    empty.style.display = 'block';
+    document.getElementById('cartCount').textContent = 0;
+    document.getElementById('selectedCount').textContent = 0;
+    document.getElementById('subtotal').textContent = '₹0';
+    document.getElementById('totalPrice').textContent = '₹100';
+    return;
+  }
+
+  empty.style.display = 'none';
+  document.getElementById('cartCount').textContent = cart.length;
+
+  let html = `
+    <div class="cart-table-header">
+      <span>Product</span>
+      <span>Quantity</span>
+      <span>Price</span>
+      <span>Total</span>
+    </div>
+  `;
+
+  cart.forEach((item, idx) => {
+    html += `
+      <div class="cart-item">
+        <div class="cart-item-left">
+          <span class="cart-num">${idx + 1}</span>
+          <input type="checkbox" class="cart-check" ${item.checked ? 'checked' : ''}
+            onchange="toggleCheck(${idx}, this.checked)">
+          <img src="${item.image}" alt="${item.name}" class="cart-item-img"
+            onerror="this.src=''">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            ${item.shade ? `<div class="cart-item-shade">Shade - ${item.shade}</div>` : ''}
+            <button class="cart-remove" onclick="removeItem(${idx})">
+              <i class="fas fa-trash-alt"></i> Remove
+            </button>
+          </div>
+        </div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${idx}, -1)">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+        </div>
+        <div class="cart-item-price">Price: ₹${item.price}</div>
+        <div class="cart-item-total">Price: ₹${item.price * item.qty}</div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html + document.getElementById('cartEmpty').outerHTML;
+
+  updateSummary();
+}
+
+function toggleCheck(idx, checked) {
+  cart[idx].checked = checked;
+  sessionStorage.setItem('glowify_cart', JSON.stringify(cart));
+  updateSummary();
+}
+
+function changeQty(idx, dir) {
+  cart[idx].qty = Math.max(1, cart[idx].qty + dir);
+  sessionStorage.setItem('glowify_cart', JSON.stringify(cart));
+  renderCart();
+}
+
+function removeItem(idx) {
+  cart.splice(idx, 1);
+  sessionStorage.setItem('glowify_cart', JSON.stringify(cart));
+  renderCart();
+}
+
+function updateSummary() {
+  const selected = cart.filter(i => i.checked);
+  const subtotal = selected.reduce((sum, i) => sum + (i.price * i.qty), 0);
+  document.getElementById('selectedCount').textContent = selected.length;
+  document.getElementById('subtotal').textContent = `₹${subtotal}`;
+  document.getElementById('totalPrice').textContent = `₹${subtotal + 100}`;
+}
+
+function proceedCheckout() {
+  const selected = cart.filter(i => i.checked);
+  if (!selected.length) {
+    alert('Please select at least one item to checkout!');
+    return;
+  }
+  window.location.href = "{% url 'checkout' %}";
+}
+
+renderCart();
+</script>
+{% endblock %}

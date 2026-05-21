@@ -1,0 +1,137 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-detail-page">
+
+  <div class="product-detail-top">
+
+    <!-- Left — Image -->
+    <div class="product-detail-img">
+      {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+      <div
+        style="width:100%;height:400px;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:4rem;border-radius:20px;">
+        💄</div>
+      {% endif %}
+    </div>
+
+    <!-- Right — Info -->
+    <div class="product-detail-info">
+      <h1 class="pd-name">{{ product.name }}</h1>
+      <div class="pd-rating">
+        <i class="fas fa-star" style="color:#f4b400;"></i>
+        <span>{{ product.rating }} ({{ product.reviews_count }} Reviews)</span>
+      </div>
+      <div class="pd-tagline">{{ product.description|truncatechars:60 }}</div>
+      <div class="pd-price">Price: ₹{{ product.price }}</div>
+
+      <!-- Shades -->
+      {% if shades %}
+      <div class="pd-shades">
+        <div class="pd-label">Shade</div>
+        <div class="shades-row">
+          {% for shade in shades %}
+          <div class="shade-dot" style="background:{{ shade.color_code }};" title="{{ shade.shade_name }}"
+            onclick="selectShade(this)"></div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Quantity -->
+      <div class="pd-qty">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span id="qtyVal">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+        <button class="btn-add-cart" style="flex:1;margin-left:12px;" onclick="addToCartAndGo()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="pd-tabs">
+    <button class="pd-tab active" onclick="switchTab(this, 'desc')">Product Description</button>
+    <button class="pd-tab" onclick="switchTab(this, 'how')">How to Use</button>
+    <button class="pd-tab" onclick="switchTab(this, 'ben')">Benefits</button>
+  </div>
+
+  <div class="pd-tab-content" id="tab-desc">
+    <p>{{ product.description }}</p>
+  </div>
+  <div class="pd-tab-content" id="tab-how" style="display:none;">
+    <p>{{ product.how_to_use|default:"Apply evenly on lips. Use a lip liner for a more defined look." }}</p>
+  </div>
+  <div class="pd-tab-content" id="tab-ben" style="display:none;">
+    <p>{{ product.benefits|default:"Long-lasting formula. Moisturizing ingredients. Vibrant pigmentation." }}</p>
+  </div>
+
+  <!-- You may also like -->
+  {% if related_products %}
+  <div class="pd-related">
+    <h2 class="section-title" style="text-align:left;">You may also <span>Like</span></h2>
+    <div class="pd-related-grid">
+      {% for rp in related_products %}
+      <a href="{% url 'product_detail' rp.pk %}" class="pd-related-card">
+        {% if rp.image %}
+        <img src="{{ rp.image.url }}" alt="{{ rp.name }}">
+        {% else %}
+        <div
+          style="width:100%;height:120px;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:2rem;border-radius:12px;">
+          💄</div>
+        {% endif %}
+        <div class="pd-related-name">{{ rp.name }}</div>
+        <button class="btn-category">Shop Now</button>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+function changeQty(dir) {
+  const el = document.getElementById('qtyVal');
+  let val = parseInt(el.textContent) + dir;
+  if (val < 1) val = 1;
+  el.textContent = val;
+}
+
+function selectShade(el) {
+  document.querySelectorAll('.shade-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function switchTab(btn, tab) {
+  document.querySelectorAll('.pd-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pd-tab-content').forEach(c => c.style.display = 'none');
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).style.display = 'block';
+}
+
+function addToCartAndGo() {
+  const cartItem = {
+    id: {{ product.pk }},
+    name: `{{ product.name|escapejs }}`,
+    price: {{ product.price }},
+    image: `{% if product.image %}{{ product.image.url }}{% endif %}`,
+    shade: document.querySelector('.shade-dot.selected')?.title || '',
+    qty: parseInt(document.getElementById('qtyVal').textContent),
+    checked: true
+  };
+
+  let cart = JSON.parse(sessionStorage.getItem('glowify_cart') || '[]');
+  const existing = cart.find(i => i.id === cartItem.id);
+  if (existing) {
+    existing.qty += cartItem.qty;
+  } else {
+    cart.push(cartItem);
+  }
+
+  sessionStorage.setItem('glowify_cart', JSON.stringify(cart));
+  window.location.href = "{% url 'cart' %}";
+}
+</script>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- OFFER BANNER -->
+<section class="offer-banner-section">
+  <div class="offer-banner-wrapper" id="offerBannerWrapper">
+    {% for banner in offer_banners %}
+    <div class="offer-banner-slide {% if forloop.first %}active{% endif %}"
+      {% if banner.image %}style="background-image:url('{{ banner.image.url }}');"
+      {% else %}style="background:linear-gradient(135deg,#fce4f3,#e91e8c);"{% endif %}>
+    </div>
+    {% empty %}
+    <div class="offer-banner-slide active" style="background:linear-gradient(135deg,#fce4f3,#e91e8c);"></div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- BUY 1 GET 1 SECTION -->
+<section class="bogo-section">
+  <h2 class="section-title">Buy 1 Get 1 <span>Free</span></h2>
+  <div class="bogo-grid">
+    {% for item in bogo_items %}
+    <div class="bogo-card">
+      {% if item.image %}
+      <div class="bogo-img">
+        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+      </div>
+      {% else %}
+      <div class="bogo-img" style="background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:3rem;">💄</div>
+      {% endif %}
+      <div class="bogo-info">
+        <h3 class="bogo-name">{{ item.name }}</h3>
+        <p class="bogo-sub">{{ item.subtitle }}</p>
+        <div class="bogo-price">
+          <span class="bogo-offer-price">₹{{ item.offer_price }}</span>
+          <span class="bogo-original-price">₹{{ item.original_price }}</span>
+        </div>
+<button class="btn-add-cart bogo-btn"
+    onclick="offersAddToCart(`{{ item.id }}`, `{{ item.name|escapejs }}`, `{{ item.offer_price }}`, `{% if item.image %}{{ item.image.url }}{% endif %}`, this)">
+    Add to Cart
+</button>
+    </div>
+    </div>
+    {% empty %}
+    <p style="color:#8a7080;text-align:center;grid-column:1/-1;">No offers available.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- EXCLUSIVE KIT SECTION -->
+{% for kit in exclusive_kits %}
+<section class="exclusive-section">
+  <div class="exclusive-inner">
+    <div class="exclusive-img">
+      {% if kit.image %}
+      <img src="{{ kit.image.url }}" alt="{{ kit.name }}">
+      {% else %}
+      <div style="width:100%;height:100%;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:3rem;border-radius:18px;">🎁</div>
+      {% endif %}
+    </div>
+    <div class="exclusive-info">
+      <h2 class="exclusive-name">{{ kit.name }}</h2>
+      <p class="exclusive-desc">{{ kit.description }}</p>
+      <div class="exclusive-price">
+        <span class="exc-offer">₹{{ kit.offer_price }}</span>
+        <span class="exc-original">₹{{ kit.original_price }}</span>
+        <span class="exc-save">Save {{ kit.save_percent }} %</span>
+      </div>
+<button class="btn-claim"
+    onclick="offersAddToCart(`{{ kit.id }}`, `{{ kit.name|escapejs }}`, `{{ kit.offer_price }}`, `{% if kit.image %}{{ kit.image.url }}{% endif %}`, this)">
+    Claim This Offer
+</button> 
+ </div>
+  </div>
+</section>
+{% endfor %}
+
+<!-- JOIN THE INNER CIRCLE -->
+<section class="inner-circle-section">
+  <div class="inner-circle-content">
+    <h2>Join The Inner Circle</h2>
+    <p>Sign up to receive early access to new launches, exclusive offers and skincare tips.</p>
+    <div class="email-form">
+      <input type="email" placeholder="Enter You Email">
+      <button>Register</button>
+    </div>
+  </div>
+</section>
+
+<script>
+// Offer Banner Auto Switch
+const offerSlides = document.querySelectorAll('.offer-banner-slide');
+let offerIdx = 0;
+
+function switchOfferBanner() {
+  offerSlides[offerIdx].classList.remove('active');
+  offerIdx = (offerIdx + 1) % offerSlides.length;
+  offerSlides[offerIdx].classList.add('active');
+}
+
+if (offerSlides.length > 1) {
+  setInterval(switchOfferBanner, 3000);
+}
+
+// Add to Cart — goes to cart page
+function offersAddToCart(id, name, price, image, btn) {
+  const cartItem = {
+    id: id,
+    name: name,
+    price: parseFloat(price),
+    image: image,
+    shade: '',
+    qty: 1,
+    checked: true
+  };
+
+  let cart = JSON.parse(sessionStorage.getItem('glowify_cart') || '[]');
+  const existing = cart.find(i => i.id === id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push(cartItem);
+  }
+  sessionStorage.setItem('glowify_cart', JSON.stringify(cart));
+
+  btn.textContent = '✓ Added!';
+  btn.style.background = '#4CAF50';
+  setTimeout(() => {
+    window.location.href = "{% url 'cart' %}";
+  }, 800);
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="order-success-page">
+
+  <div class="order-success-layout">
+
+    <!-- LEFT -->
+    <div class="order-success-left">
+      <h1 class="order-success-title">Thank you for Your Purchase !</h1>
+
+      <div class="order-numbers" id="orderNumbers">
+        <!-- Filled by JS -->
+      </div>
+
+      <div class="billing-section">
+        <h3 class="billing-title">Billing Address:</h3>
+        <div class="billing-row"><span class="billing-label">Name</span><span id="billName">: —</span></div>
+        <div class="billing-row"><span class="billing-label">Address</span><span id="billAddress">: —</span></div>
+        <div class="billing-row"><span class="billing-label">Phone No</span><span id="billPhone">: —</span></div>
+      </div>
+
+      <div class="delivery-estimate">
+        <div class="delivery-truck">🚚</div>
+        <div class="delivery-info">
+          <div class="delivery-label">Estimated Delivery</div>
+          <div class="delivery-date" id="deliveryDate">—</div>
+          <div class="delivery-method">Via premium express courier</div>
+        </div>
+      </div>
+
+      <button class="btn-track-order" onclick="window.location.href='{% url 'track_order' %}'">
+        Track Order
+      </button>
+    </div>
+
+    <!-- RIGHT — Order Summary -->
+    <div class="checkout-summary">
+      <h3 class="summary-title">Order Summary</h3>
+      <div id="successItems"></div>
+      <div class="summary-divider"></div>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="sucSubtotal">₹0</span>
+      </div>
+      <div class="summary-row">
+        <span>Estimated Shipping</span>
+        <span>₹100</span>
+      </div>
+      <div class="summary-row">
+        <span>GST</span>
+        <span>₹100</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row summary-total">
+        <span>Total</span>
+        <span id="sucTotal">₹200</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const order = JSON.parse(sessionStorage.getItem('glowify_order') || '{}');
+
+if (order.name) {
+  document.getElementById('billName').textContent = ': ' + order.name;
+  document.getElementById('billAddress').textContent = ': ' + order.address;
+  document.getElementById('billPhone').textContent = ': ' + order.phone;
+
+  // Order numbers
+  const orderNums = document.getElementById('orderNumbers');
+  let html = '';
+  (order.orderNos || []).forEach((no, i) => {
+    html += `<div class="order-num-row">${i + 1}. Order No ${no}</div>`;
+  });
+  html += `<div class="order-date">${order.date}</div>`;
+  orderNums.innerHTML = html;
+
+  // Delivery date — 5 days from now
+  const delivery = new Date();
+  delivery.setDate(delivery.getDate() + 5);
+  document.getElementById('deliveryDate').textContent = delivery.toLocaleDateString('en-IN', {
+    weekday: 'long', month: 'long', day: 'numeric'
+  });
+
+  // Items
+  let subtotal = 0;
+  let itemsHtml = '';
+  (order.items || []).forEach(item => {
+    subtotal += item.price * item.qty;
+    itemsHtml += `
+      <div class="co-item">
+        <img src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
+        <div class="co-item-info">
+          <div class="co-item-name">${item.name}</div>
+          ${item.shade ? `<div class="co-item-shade">Shade - ${item.shade}</div>` : ''}
+          <div class="co-item-qty">Qty: ${item.qty}</div>
+        </div>
+        <div class="co-item-price">Price: ₹${item.price}</div>
+      </div>
+    `;
+  });
+
+  document.getElementById('successItems').innerHTML = itemsHtml;
+  document.getElementById('sucSubtotal').textContent = `₹${subtotal}`;
+  document.getElementById('sucTotal').textContent = `₹${subtotal + 200}`;
+}
+</script>
+{% endblock %}

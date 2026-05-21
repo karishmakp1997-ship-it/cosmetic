@@ -1,0 +1,361 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero-slides-wrapper">
+    <div class="hero-slides" id="heroSlides">
+      {% for banner in banners %}
+      <div class="hero-slide {% if forloop.first %}active{% endif %}"
+        {% if banner.image %}style="background-image:url('{{ banner.image.url }}');"
+        {% else %}style="background:linear-gradient(135deg,#fce4f3,#f8c8e8);"{% endif %}>
+      </div>
+      {% empty %}
+      <div class="hero-slide active" style="background:linear-gradient(135deg,#fce4f3,#f8c8e8);"></div>
+      {% endfor %}
+    </div>
+  </div>
+
+<!-- Single moving button -->
+  <button class="hero-btn-moving" id="heroBtn">Shop Now</button>
+
+  <div class="hero-dots" id="heroDots">
+    {% for banner in banners %}
+    <div class="hero-dot {% if forloop.first %}active{% endif %}" onclick="heroGoTo({{ forloop.counter0 }})"></div>
+    {% endfor %}
+  </div>
+</section>
+<!-- LUXURY SECTION -->
+<section class="luxury-section">
+  <div class="luxury-img-wrapper" id="luxuryImgWrapper">
+    <img src="{% static 'images/jj.webp' %}" alt="Luxury Back" class="luxury-img">
+    <img src="{% static 'images/lip11.jpg' %}" alt="Luxury Front" class="luxury-img">
+  </div>
+  <div class="luxury-content">
+    <h2>Where Luxury<br>Meets <em>Skin Science</em></h2>
+    <div class="luxury-divider"></div>
+    <p>At Glowify, we believe oily skin deserves premium care. Our dermatologist-tested formula blends advanced
+      ingredients with elegant skincare innovation — giving you confidence without compromise.</p>
+  </div>
+</section>
+
+<!-- POWERED BY INGREDIENTS -->
+<section class="powered-section">
+  <h2 class="powered-title">Powered by <span>Performance</span> Ingredients</h2>
+  <div style="overflow:hidden">
+    <div class="marquee-track" id="marqueeTrack">
+      {% for ing in ingredients %}
+      <div class="powered-card">
+        {% if ing.image %}
+        <img src="{{ ing.image.url }}" alt="{{ ing.name }}">
+        {% else %}
+        <div
+          style="width:100%;height:170px;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">
+          🌿</div>
+        {% endif %}
+        <div class="powered-card-info">
+          <h4>{{ ing.name }}</h4>
+          <p>{{ ing.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+      {% for ing in ingredients %}
+      <div class="powered-card">
+        {% if ing.image %}
+        <img src="{{ ing.image.url }}" alt="{{ ing.name }}">
+        {% else %}
+        <div
+          style="width:100%;height:170px;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">
+          🌿</div>
+        {% endif %}
+        <div class="powered-card-info">
+          <h4>{{ ing.name }}</h4>
+          <p>{{ ing.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="featured-section">
+  <h2 class="section-title">Featured <span>Products</span></h2>
+  <div class="products-grid">
+    {% for product in products %}
+<div class="product-card" 
+    onclick="window.location='{% url 'product_detail' product.pk %}'"
+    style="cursor:pointer;">
+          {% if product.badge %}
+      <span class="product-badge badge-{{ product.badge }}">
+        {% if product.badge == 'bestseller' %}Best Seller
+        {% elif product.badge == 'new' %}New
+        {% elif product.badge == 'trending' %}Trending
+        {% elif product.badge == 'hotpick' %}Hot Pick
+        {% elif product.badge == 'skinloving' %}Skin Loving
+        {% endif %}
+      </span>
+      {% endif %}
+      {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+      <div
+        style="width:100%;height:160px;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;border-radius:12px;margin-bottom:14px;">
+        💄</div>
+      {% endif %}
+      <div class="product-name">{{ product.name }}</div>
+      <div class="product-desc">{{ product.description }}</div>
+      <div class="product-rating">
+        <i class="fas fa-star"></i>
+        <span>{{ product.rating }} ({{ product.reviews_count }} Reviews)</span>
+      </div>
+      <div class="product-price">Price: ₹{{ product.price }}</div>
+      <div class="product-actions">
+    <button class="btn-add-cart" 
+        onclick="window.location='{% url 'product_detail' product.pk %}'">
+        Add to cart
+    </button>
+    <button class="btn-wishlist"><i class="fas fa-heart"></i></button>
+</div>
+    </div>
+    {% empty %}
+    <p style="color:#8a7080;text-align:center;grid-column:1/-1;">No products yet. Add from admin panel.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- TOP CATEGORIES -->
+<section class="categories-section">
+  <h2 class="section-title">Top <span>Categories</span></h2>
+  <div class="categories-slider-wrapper">
+    <button class="cat-arrow left" onclick="catMove(-1)"><i class="fas fa-chevron-left"></i></button>
+    <div class="categories-slider">
+      <div class="categories-track" id="categoriesTrack">
+        {% for cat in categories %}
+        <div class="category-card">
+          <div class="category-img-wrap">
+            <div class="category-img-inner">
+              <div class="category-front">
+                {% if cat.front_image %}
+                <img src="{{ cat.front_image.url }}" alt="{{ cat.name }}">
+                {% else %}
+                <div
+                  style="width:100%;height:100%;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:2rem;">
+                  💅</div>
+                {% endif %}
+              </div>
+              <div class="category-back">
+                {% if cat.back_image %}
+                <img src="{{ cat.back_image.url }}" alt="{{ cat.name }}">
+                {% else %}
+                <div
+                  style="width:100%;height:100%;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:2rem;">
+                  ✨</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="category-name">{{ cat.name }}</div>
+          <div class="category-sub">{{ cat.subtitle }}</div>
+          <button class="btn-category">Shop Now</button>
+        </div>
+        {% empty %}
+        <p style="color:#8a7080;">No categories yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <button class="cat-arrow right" onclick="catMove(1)"><i class="fas fa-chevron-right"></i></button>
+  </div>
+</section>
+
+<!-- WHY GLOWIFY -->
+<section class="why-section" id="whySection">
+  <div class="why-left">
+    <div class="flower-ring-wrapper">
+      <div class="flower-ring">
+        <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="pinkGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fce4f3" />
+              <stop offset="100%" stop-color="#e91e8c" />
+            </radialGradient>
+          </defs>
+          <ellipse cx="150" cy="40" rx="30" ry="50" fill="url(#pinkGrad)" opacity="0.85" />
+          <ellipse cx="150" cy="260" rx="30" ry="50" fill="url(#pinkGrad)" opacity="0.85" />
+          <ellipse cx="40" cy="150" rx="50" ry="30" fill="url(#pinkGrad)" opacity="0.85" />
+          <ellipse cx="260" cy="150" rx="50" ry="30" fill="url(#pinkGrad)" opacity="0.85" />
+          <ellipse cx="68" cy="68" rx="30" ry="50" fill="url(#pinkGrad)" opacity="0.75" transform="rotate(45 68 68)" />
+          <ellipse cx="232" cy="68" rx="30" ry="50" fill="url(#pinkGrad)" opacity="0.75"
+            transform="rotate(-45 232 68)" />
+          <ellipse cx="68" cy="232" rx="30" ry="50" fill="url(#pinkGrad)" opacity="0.75"
+            transform="rotate(-45 68 232)" />
+          <ellipse cx="232" cy="232" rx="30" ry="50" fill="url(#pinkGrad)" opacity="0.75"
+            transform="rotate(45 232 232)" />
+          <circle cx="150" cy="150" r="80" fill="#fce4f3" opacity="0.5" />
+        </svg>
+      </div>
+      <div class="girl-img-wrapper">
+        <img src="{% static 'images/a1 (25).png' %}" alt="Glowify Girl">
+      </div>
+    </div>
+  </div>
+  <div class="why-right">
+    <h2 class="why-title">Why <span>Glowify</span>?</h2>
+    {% for point in why_points %}
+    <div class="why-point">
+      <div class="why-num">0{{ forloop.counter }}</div>
+      <div class="why-point-pill">
+        <h4>{{ point.title }}</h4>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- HAPPY CUSTOMERS -->
+<section class="customers-section">
+  <h2 class="section-title">Happy <span>Customers</span></h2>
+  <div class="customers-slider">
+    <div class="customer-cards-wrap">
+      <div class="customer-cards-track" id="customerTrack">
+        {% for customer in customers %}
+        <div class="customer-card">
+          {% if customer.avatar %}
+          <img class="customer-avatar" src="{{ customer.avatar.url }}" alt="{{ customer.name }}">
+          {% else %}
+          <div
+            style="width:80px;height:80px;border-radius:50%;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 16px;border:3px solid var(--pink);">
+            👩</div>
+          {% endif %}
+          <div class="cust-stars">{% for i in "12345" %}★{% endfor %}</div>
+          <div class="customer-quote">"{{ customer.review }}"</div>
+          <div class="customer-name">{{ customer.name }}</div>
+          <div class="customer-loc">{{ customer.location }}</div>
+        </div>
+        {% empty %}
+        <div class="customer-card">
+          <div style="text-align:center;color:#8a7080;">No reviews yet.</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="cust-arrows">
+      <button class="cust-arr" onclick="custMove(-1)"><i class="fas fa-chevron-left"></i></button>
+      <button class="cust-arr" onclick="custMove(1)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="cust-dots" id="custDots">
+      {% for customer in customers %}
+      <div class="cust-dot {% if forloop.first %}active{% endif %}" onclick="custGoTo({{ forloop.counter0 }})"></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- INNER CIRCLE -->
+<section class="inner-circle-section">
+  <div class="inner-circle-content">
+    <h2>Join The Inner Circle</h2>
+    <p>Be the first to know about new launches, exclusive offers, and beauty secrets curated just for you.</p>
+    <div class="email-form">
+      <input type="email" placeholder="Enter your email address...">
+      <button>Join Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- FLASH SALE -->
+<section class="flash-sale-section">
+  <div class="flash-sale-bg-circle"></div>
+
+  <div class="flash-girl">
+    <img src="{% static 'images/a1 (24).png' %}" alt="Flash Girl" onerror="this.parentElement.style.display='none'">
+  </div>
+
+  <div class="flash-center">
+    <div class="flash-tag">
+      <span class="flash-tag-title">Flash Sale</span>
+      <span class="flash-tag-percent">50 %</span>
+      <span class="flash-tag-off">Off</span>
+    </div>
+    <div class="flash-quote">"Glow Confidently every Day"</div>
+    <button class="btn-shop-flash">Shop Now</button>
+  </div>
+
+  <div class="flash-products">
+    <img src="{% static 'images/a1 (30).png' %}" alt="Products" onerror="this.parentElement.style.display='none'">
+  </div>
+
+  <div class="sparkle s1">✦</div>
+  <div class="sparkle s2">✦</div>
+  <div class="sparkle s3">✦</div>
+  <div class="sparkle s4">·</div>
+  <div class="sparkle s5">·</div>
+</section>
+
+<script>
+const bannerPositions = [
+  {% for banner in banners %}
+  '{{ banner.button_position }}',
+  {% endfor %}
+];
+const bannerTexts = [
+  {% for banner in banners %}
+  '{{ banner.button_text }}',
+  {% endfor %}
+];
+const bannerFlashTags = [
+  {% for banner in banners %}
+  {{ banner.show_flash_tag|yesno:"true,false" }},
+  {% endfor %}
+];
+
+let heroIdx = 0;
+const heroSlides = document.querySelectorAll('.hero-slide');
+const heroBtnEl = document.getElementById('heroBtn');
+const heroDotsEl = document.querySelectorAll('.hero-dot');
+const flashTagEl = document.getElementById('flashTag');
+
+function getButtonLeft(position) {
+  return position === 'right' ? '72%' : '8%';
+}
+
+function updateHero() {
+  // Fade switch — NOT transform!
+  heroSlides.forEach((s, i) => s.classList.toggle('active', i === heroIdx));
+  heroDotsEl.forEach((d, i) => d.classList.toggle('active', i === heroIdx));
+  if (heroBtnEl && bannerPositions[heroIdx] !== undefined) {
+    heroBtnEl.style.left = getButtonLeft(bannerPositions[heroIdx]);
+    heroBtnEl.textContent = bannerTexts[heroIdx] || 'Shop Now';
+  }
+  if (flashTagEl) {
+    flashTagEl.style.display = bannerFlashTags[heroIdx] ? 'flex' : 'none';
+  }
+}
+
+function heroMove(dir) {
+  if (dir !== undefined) {
+    heroIdx = (heroIdx + dir + heroSlides.length) % heroSlides.length;
+  } else {
+    heroIdx = (heroIdx + 1) % heroSlides.length;
+  }
+  updateHero();
+}
+
+function heroGoTo(i) {
+  heroIdx = i;
+  updateHero();
+}
+
+// Init
+if (heroBtnEl && bannerPositions.length > 0) {
+  heroBtnEl.style.left = getButtonLeft(bannerPositions[0]);
+}
+if (flashTagEl && bannerFlashTags.length > 0) {
+  flashTagEl.style.display = bannerFlashTags[0] ? 'flex' : 'none';
+}
+if (heroSlides.length > 0) {
+  setInterval(() => heroMove(), 3000);
+}
+</script>
+{% endblock %}

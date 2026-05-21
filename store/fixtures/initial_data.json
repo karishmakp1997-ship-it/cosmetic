@@ -1,0 +1,414 @@
+[
+{
+  "model": "store.banner",
+  "pk": 1,
+  "fields": {
+    "image": "banners/a1_19.png",
+    "button_text": "Shop Now",
+    "button_position": "left",
+    "is_active": true,
+    "order": 1
+  }
+},
+{
+  "model": "store.banner",
+  "pk": 2,
+  "fields": {
+    "image": "banners/a1_20.png",
+    "button_text": "Shop Now",
+    "button_position": "right",
+    "is_active": true,
+    "order": 2
+  }
+},
+{
+  "model": "store.banner",
+  "pk": 3,
+  "fields": {
+    "image": "banners/a1_21.png",
+    "button_text": "Shop Now",
+    "button_position": "left",
+    "is_active": true,
+    "order": 3
+  }
+},
+{
+  "model": "store.ingredient",
+  "pk": 6,
+  "fields": {
+    "name": "Niacinamide",
+    "description": "Minimises pores and regulates excess oil production.",
+    "image": "ingredients/a1_4_xg0UaZE.png",
+    "order": 1
+  }
+},
+{
+  "model": "store.ingredient",
+  "pk": 7,
+  "fields": {
+    "name": "Tea Tree Extract",
+    "description": "Helps reduce acne and calm skin irritation.",
+    "image": "ingredients/a1_1_diPmvJB.png",
+    "order": 2
+  }
+},
+{
+  "model": "store.ingredient",
+  "pk": 8,
+  "fields": {
+    "name": "Activated Charcoal",
+    "description": "Deep cleanses and purifies clogged pores effectively.",
+    "image": "ingredients/a1_3_41lqp5c.png",
+    "order": 3
+  }
+},
+{
+  "model": "store.ingredient",
+  "pk": 9,
+  "fields": {
+    "name": "Hyaluronic Acid",
+    "description": "Deeply hydrates and plumps skin for a dewy finish.",
+    "image": "ingredients/a1_2_6un6Ph1.png",
+    "order": 4
+  }
+},
+{
+  "model": "store.category",
+  "pk": 7,
+  "fields": {
+    "name": "Lipsticks",
+    "subtitle": "Vibrant & Bold Color",
+    "front_image": "categories/a1_9_dVo7arq.png",
+    "back_image": "categories/a1_9_ZLaNuz9.png",
+    "order": 1
+  }
+},
+{
+  "model": "store.category",
+  "pk": 8,
+  "fields": {
+    "name": "Skincare",
+    "subtitle": "Hydrating Essentials",
+    "front_image": "categories/a1_10_lEjH3kg.png",
+    "back_image": "categories/a1_10_mmqS8d5.png",
+    "order": 2
+  }
+},
+{
+  "model": "store.category",
+  "pk": 9,
+  "fields": {
+    "name": "Eye Makeup",
+    "subtitle": "Shadows & Liners",
+    "front_image": "categories/a1_11_6xHDyVb.png",
+    "back_image": "categories/a1_11_TZMTGwG.png",
+    "order": 3
+  }
+},
+{
+  "model": "store.category",
+  "pk": 10,
+  "fields": {
+    "name": "Hair Care",
+    "subtitle": "Shampoos & Oils",
+    "front_image": "categories/a1_12_ToCVyQH.png",
+    "back_image": "categories/a1_12_l9LyvBT.png",
+    "order": 4
+  }
+},
+{
+  "model": "store.category",
+  "pk": 11,
+  "fields": {
+    "name": "Face Masks",
+    "subtitle": "Glow & Nourish",
+    "front_image": "categories/a1_26.webp",
+    "back_image": "categories/a1_26_a7WZ2Xz.webp",
+    "order": 5
+  }
+},
+{
+  "model": "store.category",
+  "pk": 12,
+  "fields": {
+    "name": "Fragrance",
+    "subtitle": "Luxurious & Scents",
+    "front_image": "categories/a1_13_vcTheqc.png",
+    "back_image": "categories/a1_13_PH1Z4R4.png",
+    "order": 6
+  }
+},
+{
+  "model": "store.category",
+  "pk": 13,
+  "fields": {
+    "name": "Nails",
+    "subtitle": "Polish & Manicure",
+    "front_image": "categories/a1_14_E68JgcH.png",
+    "back_image": "categories/a1_14_xsvKe0j.png",
+    "order": 7
+  }
+},
+{
+  "model": "store.product",
+  "pk": 1,
+  "fields": {
+    "name": "Glow Matte Lipstick – Rose Bliss",
+    "description": "Ultra-smooth matte finish with 12-hour long wear.",
+    "price": "799.00",
+    "rating": "4.8",
+    "reviews_count": 543,
+    "badge": "bestseller",
+    "image": "products/a1_33_BYIXyG9.png",
+    "category": 7,
+    "is_active": true,
+    "created_at": "2026-05-07T04:47:38.609Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 2,
+  "fields": {
+    "name": "Radiant Glow Serum",
+    "description": "Brightens skin and boosts natural glow.",
+    "price": "1299.00",
+    "rating": "4.7",
+    "reviews_count": 459,
+    "badge": "new",
+    "image": "products/a1_34_GTx2cce.png",
+    "category": 8,
+    "is_active": true,
+    "created_at": "2026-05-07T04:48:48.288Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 3,
+  "fields": {
+    "name": "Velvet Touch Foundation",
+    "description": "Lightweight coverage with flawless finish",
+    "price": "1099.00",
+    "rating": "4.6",
+    "reviews_count": 169,
+    "badge": "trending",
+    "image": "products/a1_35_t5NcIzD.png",
+    "category": 8,
+    "is_active": true,
+    "created_at": "2026-05-07T05:43:51.506Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 4,
+  "fields": {
+    "name": "Blush & Bloom Cheek Tint",
+    "description": "Natural rosy tint for fresh everyday look.",
+    "price": "456.00",
+    "rating": "4.5",
+    "reviews_count": 776,
+    "badge": "hotpick",
+    "image": "products/a1_6_HcDADdz.png",
+    "category": 8,
+    "is_active": true,
+    "created_at": "2026-05-07T05:45:20.951Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 5,
+  "fields": {
+    "name": "Luxe Shine Lip Gloss – Crystal Pink",
+    "description": "Non-sticky gloss with high-shine finish and nourishing formula.",
+    "price": "346.00",
+    "rating": "4.5",
+    "reviews_count": 126,
+    "badge": "new",
+    "image": "products/a1_7_mUFA7xJ.png",
+    "category": 7,
+    "is_active": true,
+    "created_at": "2026-05-07T05:48:06.160Z"
+  }
+},
+{
+  "model": "store.product",
+  "pk": 6,
+  "fields": {
+    "name": "Hydrating Glow Face Mist",
+    "description": "Refreshes, hydrates, and sets makeup for all-day glow.",
+    "price": "599.00",
+    "rating": "4.7",
+    "reviews_count": 344,
+    "badge": "skinloving",
+    "image": "products/a1_8_E1jQcbM.png",
+    "category": 8,
+    "is_active": true,
+    "created_at": "2026-05-07T05:49:38.496Z"
+  }
+},
+{
+  "model": "store.whypoint",
+  "pk": 5,
+  "fields": {
+    "title": "Clean Beauty Promise",
+    "description": "100% cruelty-free, vegan and dermatologist approved formulations.",
+    "order": 1
+  }
+},
+{
+  "model": "store.whypoint",
+  "pk": 6,
+  "fields": {
+    "title": "Proven Results",
+    "description": "Clinically tested showing visible results in just 14 days.",
+    "order": 2
+  }
+},
+{
+  "model": "store.whypoint",
+  "pk": 7,
+  "fields": {
+    "title": "Expert Formulated",
+    "description": "Crafted by leading skincare scientists and dermatologists worldwide.",
+    "order": 3
+  }
+},
+{
+  "model": "store.whypoint",
+  "pk": 8,
+  "fields": {
+    "title": "Sustainable Beauty",
+    "description": "Eco-conscious packaging with carbon neutral shipping always.",
+    "order": 4
+  }
+},
+{
+  "model": "store.customer",
+  "pk": 1,
+  "fields": {
+    "name": "Priya R.",
+    "location": "Bengaluru, Karnataka",
+    "review": "I've been using Glowify's serum for 3 weeks and my skin has never looked better! The glow is absolutely real.",
+    "avatar": "customers/a1_7_IdG3hgy.jpg",
+    "stars": 5,
+    "is_active": true
+  }
+},
+{
+  "model": "store.customer",
+  "pk": 2,
+  "fields": {
+    "name": "Ananya S.",
+    "location": "Chennai, Tamil Nadu",
+    "review": "The matte lipstick stays on for hours — literally through lunch and coffee. Total game changer product!",
+    "avatar": "customers/a1_31_Qe6m1uW.png",
+    "stars": 5,
+    "is_active": true
+  }
+},
+{
+  "model": "store.customer",
+  "pk": 3,
+  "fields": {
+    "name": "Meera K.",
+    "location": "Mumbai, Maharashtra",
+    "review": "Packaging is stunning and the foundation blends like a dream. I get compliments every single day!",
+    "avatar": "customers/a1_29_XCgIeju.webp",
+    "stars": 5,
+    "is_active": true
+  }
+},
+{
+  "model": "store.flashsaleitem",
+  "pk": 5,
+  "fields": {
+    "product_name": "Glow Matte Lipstick",
+    "discount": "40% OFF",
+    "original_price": "1299.00",
+    "sale_price": "779.00",
+    "is_active": true
+  }
+},
+{
+  "model": "store.flashsaleitem",
+  "pk": 6,
+  "fields": {
+    "product_name": "Radiant Glow Serum",
+    "discount": "30% OFF",
+    "original_price": "1999.00",
+    "sale_price": "1399.00",
+    "is_active": true
+  }
+},
+{
+  "model": "store.flashsaleitem",
+  "pk": 7,
+  "fields": {
+    "product_name": "Velvet Touch Foundation",
+    "discount": "25% OFF",
+    "original_price": "1499.00",
+    "sale_price": "1124.00",
+    "is_active": true
+  }
+},
+{
+  "model": "store.flashsaleitem",
+  "pk": 8,
+  "fields": {
+    "product_name": "Hydrating Face Mist Bundle",
+    "discount": "50% OFF",
+    "original_price": "1198.00",
+    "sale_price": "599.00",
+    "is_active": true
+  }
+},
+{
+  "model": "store.navlink",
+  "pk": 6,
+  "fields": {
+    "label": "Home",
+    "url": "/",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "store.navlink",
+  "pk": 7,
+  "fields": {
+    "label": "Shop",
+    "url": "#",
+    "order": 2,
+    "is_active": true
+  }
+},
+{
+  "model": "store.navlink",
+  "pk": 8,
+  "fields": {
+    "label": "Offers",
+    "url": "#",
+    "order": 3,
+    "is_active": true
+  }
+},
+{
+  "model": "store.navlink",
+  "pk": 9,
+  "fields": {
+    "label": "About",
+    "url": "#",
+    "order": 4,
+    "is_active": true
+  }
+},
+{
+  "model": "store.navlink",
+  "pk": 10,
+  "fields": {
+    "label": "Contact",
+    "url": "#",
+    "order": 5,
+    "is_active": true
+  }
+}
+]

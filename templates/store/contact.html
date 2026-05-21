@@ -1,0 +1,185 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- HERO BANNER -->
+<section class="contact-hero">
+  <div class="contact-hero-content">
+    <h1 class="contact-hero-title">Get In Touch</h1>
+    <p class="contact-hero-sub">Wheather you have a question about our formulas or your recent order, our beauty experts are here to help.</p>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<section class="contact-main">
+
+  <!-- LEFT — Send a Message -->
+  <div class="contact-form-card">
+    <h2 class="contact-form-title">Send a Message</h2>
+
+    <div class="contact-form-row">
+      <div class="contact-form-group">
+        <label>Full Name</label>
+        <input type="text" id="contactName" placeholder="e.g Narmatha">
+      </div>
+      <div class="contact-form-group">
+        <label>Email Id</label>
+        <input type="email" id="contactEmail" placeholder="nar@gmail.com">
+      </div>
+    </div>
+
+    <div class="contact-form-group">
+      <label>Mobile No</label>
+      <input type="text" id="contactMobile" placeholder="Enter mobile number">
+    </div>
+
+    <div class="contact-form-group">
+      <label>Message</label>
+      <textarea id="contactMessage" placeholder="Write your message here..." rows="5"></textarea>
+    </div>
+
+    <button class="btn-send" onclick="sendMessage()">Send</button>
+  </div>
+
+  <!-- RIGHT — Customer Services -->
+  <div class="contact-services">
+    <div class="contact-service-card">
+      <h3 class="service-title">Customer Services</h3>
+
+      <div class="service-item">
+        <div class="service-icon">📧</div>
+        <div class="service-info">
+          <div class="service-name">Email Us</div>
+          <div class="service-detail">supportglowify@gmail.com</div>
+        </div>
+      </div>
+
+      <div class="service-item">
+        <div class="service-icon">📞</div>
+        <div class="service-info">
+          <div class="service-name">Call Us</div>
+          <div class="service-detail">+91-1234567890</div>
+          <div class="service-detail">+91-1234567890</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-action-card" onclick="window.location.href='{% url 'track_order' %}'" style="cursor:pointer;">
+      <span class="action-label">Track You Order</span>
+      <button class="action-arrow"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div class="contact-action-card" style="cursor:pointer;">
+      <span class="action-label">Cancel Order</span>
+      <button class="action-arrow"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+
+  <div class="faq-list">
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>1. Is Cream Luxe Finish lipstick long-lasting?</span>
+        <i class="fas fa-chevron-up faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        Yes, it lasts up to 6–8 hours with minimal touch-ups.
+      </div>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>2. Is it matte or glossy?</span>
+        <i class="fas fa-chevron-up faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        It has a creamy satin finish — not too matte, not too glossy.
+      </div>
+    </div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>3. Does it dry out lips?</span>
+        <i class="fas fa-chevron-up faq-icon"></i>
+      </div>
+      <div class="faq-answer">
+        No, it is enriched with moisturizing ingredients to keep lips soft and smooth.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>4. Is Glowify cruelty-free?</span>
+        <i class="fas fa-chevron-down faq-icon"></i>
+      </div>
+      <div class="faq-answer" style="display:none;">
+        Yes, all Glowify products are 100% cruelty-free and vegan certified.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>5. How long does delivery take?</span>
+        <i class="fas fa-chevron-down faq-icon"></i>
+      </div>
+      <div class="faq-answer" style="display:none;">
+        Standard delivery takes 3–5 business days across India.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function sendMessage() {
+  const name = document.getElementById('contactName').value;
+  const email = document.getElementById('contactEmail').value;
+  const mobile = document.getElementById('contactMobile').value;
+  const message = document.getElementById('contactMessage').value;
+
+  if (!name || !email || !message) {
+    alert('Please fill all required fields!');
+    return;
+  }
+
+  const btn = document.querySelector('.btn-send');
+  btn.textContent = '✓ Sent!';
+  btn.style.background = '#4CAF50';
+  setTimeout(() => {
+    btn.textContent = 'Send';
+    btn.style.background = '';
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactEmail').value = '';
+    document.getElementById('contactMobile').value = '';
+    document.getElementById('contactMessage').value = '';
+  }, 2000);
+}
+
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const answer = item.querySelector('.faq-answer');
+  const icon = el.querySelector('.faq-icon');
+  const isOpen = item.classList.contains('open');
+
+  if (isOpen) {
+    item.classList.remove('open');
+    answer.style.display = 'none';
+    icon.classList.remove('fa-chevron-up');
+    icon.classList.add('fa-chevron-down');
+  } else {
+    item.classList.add('open');
+    answer.style.display = 'block';
+    icon.classList.remove('fa-chevron-down');
+    icon.classList.add('fa-chevron-up');
+  }
+}
+</script>
+
+{% endblock %}

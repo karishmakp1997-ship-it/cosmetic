@@ -1,0 +1,92 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="track-page">
+  <div id="trackItems">
+    <!-- Filled by JS -->
+  </div>
+</div>
+
+<script>
+const order = JSON.parse(sessionStorage.getItem('glowify_order') || '{}');
+const items = order.items || [];
+
+const statuses = [
+  { label: 'Ordered', done: true },
+  { label: 'Processing', done: true },
+  { label: 'Shipped', done: true },
+  { label: 'Out for Delivery', done: false },
+];
+
+const messages = [
+  'Your order is currently out for delivery and will reach you by 6:00 PM',
+  'Your order is currently Packed, and ready to ship.'
+];
+
+const container = document.getElementById('trackItems');
+let html = '';
+
+items.forEach((item, idx) => {
+  const isDone = statuses.map((s, i) => i < 3 ? true : false);
+  const msg = messages[idx % messages.length];
+  const orderNo = (order.orderNos || [])[idx] || '#00000000';
+
+  html += `
+    <div class="track-card">
+      <div class="track-left">
+        <div class="track-product-name">${item.name}</div>
+
+        <!-- Progress -->
+        <div class="track-progress">
+          ${statuses.map((s, i) => `
+            <div class="track-step ${s.done ? 'done' : ''}">
+              <div class="track-circle">
+                ${s.done ? '<i class="fas fa-check"></i>' : ''}
+              </div>
+              <div class="track-label">${s.label}</div>
+            </div>
+            ${i < statuses.length - 1 ? `<div class="track-line ${statuses[i+1].done ? 'done' : ''}"></div>` : ''}
+          `).join('')}
+        </div>
+
+        <p class="track-message">${msg}</p>
+
+        <!-- Map -->
+        <div class="track-map">
+          <div class="map-bg">
+            <div class="map-truck ${idx === 0 ? 'moving' : ''}">🚚</div>
+            <div class="map-pins">
+              <div class="map-pin">📍</div>
+              <div class="map-pin">📍</div>
+              <div class="map-pin active">📍</div>
+            </div>
+          </div>
+          <button class="btn-live-map">
+            <i class="fas fa-map-marker-alt" style="color:var(--pink)"></i> View Live Map
+          </button>
+        </div>
+      </div>
+
+      <div class="track-right">
+        <h4 class="track-right-title">Delivery Details</h4>
+        <div class="track-detail-row">
+          <span class="track-detail-label">Order Number:</span>
+          <span class="track-detail-val">${orderNo}</span>
+        </div>
+        <div class="track-detail-row">
+          <span class="track-detail-label">Shipping Address</span>
+        </div>
+        <div class="track-address">${order.address || '—'}</div>
+        <div class="track-detail-row" style="margin-top:12px;">
+          <span class="track-detail-label">Shipping Method</span>
+        </div>
+        <div class="track-method">Standard Delivery (3-5 Business days)</div>
+      </div>
+    </div>
+  `;
+});
+
+container.innerHTML = html || '<div style="text-align:center;padding:60px;color:#8a7080;">No orders to track.</div>';
+</script>
+{% endblock %}
